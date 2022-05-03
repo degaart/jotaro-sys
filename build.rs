@@ -21,7 +21,7 @@ fn main() {
         .probe("minizip")
         .unwrap();
 
-    if env::var("CARGO_CFG_TARGET_OS").unwrap_or("".to_string()) == "macos" {
+    if env::var("CARGO_CFG_TARGET_OS").unwrap_or_else(|_| "".to_string()) == "macos" {
         println!("cargo:rustc-link-lib=framework=CoreFoundation");
         println!("cargo:rustc-link-lib=framework=Security");
     }
