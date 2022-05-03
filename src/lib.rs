@@ -6,10 +6,10 @@ include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 
 #[cfg(test)]
 mod tests {
-    use std::os::raw;
-    use std::ptr;
     use crate::*;
     use std::ffi::CString;
+    use std::os::raw;
+    use std::ptr;
 
     #[test]
     fn it_works() {
@@ -22,11 +22,7 @@ mod tests {
 
             let zip_filename = "/tmp/test.zip";
             let zip_filename = CString::new(zip_filename).unwrap();
-            let ret = mz_zip_writer_open_file(
-                zip, 
-                zip_filename.as_ptr(),
-                0, 
-                0);
+            let ret = mz_zip_writer_open_file(zip, zip_filename.as_ptr(), 0, 0);
             assert_eq!(ret, MZ_OK);
 
             let password = "za warudo";

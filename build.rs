@@ -14,8 +14,11 @@ fn main() {
         .define("MZ_LIBCOMP", "OFF")
         .build();
     let lib_dir = out_path.join("lib");
-    
-    env::set_var("PKG_CONFIG_PATH", lib_dir.join("pkgconfig").to_str().unwrap());
+
+    env::set_var(
+        "PKG_CONFIG_PATH",
+        lib_dir.join("pkgconfig").to_str().unwrap(),
+    );
     pkg_config::Config::new()
         .statik(true)
         .probe("minizip")
@@ -38,14 +41,13 @@ fn main() {
         .allowlist_type("mz_.*")
         .allowlist_var("MZ_.*")
         .blocklist_function("mz_os_.*")
-        .blocklist_type("DIR|.*_mutex_t|dirent|_telldir|tm|__uint8_t|__uint16_t|__uint64_t|time_t|wchar_t")
+        .blocklist_type(
+            "DIR|.*_mutex_t|dirent|_telldir|tm|__uint8_t|__uint16_t|__uint64_t|time_t|wchar_t",
+        )
         .raw_line("use libc::{tm,time_t};")
         .generate()
         .unwrap();
-    
-    let out_dir = PathBuf::from(env::var("OUT_DIR").unwrap());
-    bindings
-        .write_to_file(out_dir.join("bindings.rs"))
-        .unwrap();
-}
 
+    let out_dir = PathBuf::from(env::var("OUT_DIR").unwrap());
+    bindings.write_to_file(out_dir.join("bindings.rs")).unwrap();
+}
