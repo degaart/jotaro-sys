@@ -1,6 +1,6 @@
 [package]
 name = "jotaro-sys"
-version = "0.1.2"
+version = "0.1.3"
 edition = "2021"
 description = "Unsafe bindings to minizip-ng"
 license = "Zlib"
