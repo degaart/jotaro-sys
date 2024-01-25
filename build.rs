@@ -5,6 +5,7 @@ use std::{env, path::PathBuf};
 fn main() {
     println!("cargo:rerun-if-changed=minizip-src");
 
+    let openssl_root = env::var("DEP_OPENSSL_ROOT").unwrap();
     let out_path = Config::new("minizip-src")
         .define("MZ_WZAES", "ON")
         .define("MZ_SIGNING", "ON")
@@ -12,17 +13,15 @@ fn main() {
         .define("MZ_LZMA", "OFF")
         .define("MZ_ZSTD", "OFF")
         .define("MZ_LIBCOMP", "OFF")
+        .define("OPENSSL_ROOT_DIR", &openssl_root)
+        .define("OPENSSL_USE_STATIC_LIBS", "ON")
         .build();
-    let lib_dir = out_path.join("lib");
 
-    env::set_var(
-        "PKG_CONFIG_PATH",
-        lib_dir.join("pkgconfig").to_str().unwrap(),
-    );
-    pkg_config::Config::new()
-        .statik(true)
-        .probe("minizip")
-        .unwrap();
+    let lib_dir = out_path.join("lib");
+    println!("cargo:rustc-link-search=native={}", lib_dir.display());
+    println!("cargo:rustc-link-lib=static=minizip");
+    println!("cargo:rustc-link-lib=static=crypto");
+    println!("cargo:rustc-link-lib=z");
 
     if env::var("CARGO_CFG_TARGET_OS").unwrap_or_else(|_| "".to_string()) == "macos" {
         println!("cargo:rustc-link-lib=framework=CoreFoundation");

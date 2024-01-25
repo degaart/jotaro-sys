@@ -1,6 +1,6 @@
 [package]
 name = "jotaro-sys"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2021"
 description = "Unsafe bindings to minizip-ng"
 license = "Zlib"
@@ -10,9 +10,9 @@ repository = "https://github.com/degaart/jotaro-sys"
 
 [dependencies]
 libc = "0.2"
+openssl-sys = { version = "0.9.99", features = [ "vendored" ] }
 
 [build-dependencies]
 cmake = "0.1"
 bindgen = "0.59"
-pkg-config = "0.3"
 
